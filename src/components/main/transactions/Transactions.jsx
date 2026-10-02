@@ -1,10 +1,27 @@
 import { useContext } from "react";
-import { TransactionContext } from "../../../context";
+import {
+  ModalToggleContext,
+  NewTransactionContext,
+  TransactionContext,
+} from "../../../context";
+import { toast } from "react-toastify";
 
 export default function Transactions() {
-
-const{transactions}=useContext(TransactionContext)
- 
+  const { transactions, setTransactions } = useContext(TransactionContext);
+  const { setModalOpen } = useContext(ModalToggleContext);
+  const { setNewTransaction } = useContext(NewTransactionContext);
+  const handelEdit = (transaction) => {
+    setModalOpen(true);
+    setNewTransaction(transaction);
+  };
+  const handleDelete = (transactionId) => {
+     
+    setTransactions([
+      ...transactions.filter((transaction) => transaction.id !== transactionId),
+    ]);
+    toast.success("Wow so easy!");
+   
+  };
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between px-1">
@@ -12,10 +29,7 @@ const{transactions}=useContext(TransactionContext)
           <h2 className="text-lg font-bold text-[#111827]">
             Transactions & Records
           </h2>
-          <span
-            id="activeCountBadge"
-            className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#80A1C1]/20 text-[#111827]"
-          >
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#80A1C1]/20 text-[#111827]">
             {transactions.length} Records
           </span>
         </div>
@@ -24,7 +38,7 @@ const{transactions}=useContext(TransactionContext)
         </div>
       </div>
 
-      <div id="expenseListContainer" className="space-y-3">
+      <div className="space-y-3">
         {transactions.map((transaction) => (
           <div
             key={transaction.id}
@@ -33,35 +47,43 @@ const{transactions}=useContext(TransactionContext)
             <div className="flex items-start sm:items-center gap-3.5 flex-1 min-w-0">
               <div
                 className={`w-12 h-12 rounded-2xl  border flex items-center justify-center text-xl shrink-0 
-                    ${transaction.category.split(" ")[1] === "Shopping" && "bg-emerald-50 border-emerald-200"}
-                    ${transaction.category.split(" ")[1] === "Entertainment" && "bg-purple-100  border-purple-200"}
-                    ${transaction.category.split(" ")[1] === "Medical" && "bg-red-50 border-red-200"}
-                    ${transaction.category.split(" ")[1] === "Utilities" && "bg-emerald-50 border-emerald-200"}
-                    ${transaction.category.split(" ")[1] === "Food" && "bg-[#FAD4C0]/40  border-[#FAD4C0]"}
-                    ${transaction.category.split(" ")[1] === "Rent" && "bg-[#80A1C1]/20  border-[#80A1C1]/40"}
-                    ${transaction.category.split(" ")[1] === "Education" && "bg-sky-50 border-sky-200"}
-                    ${transaction.category.split(" ")[1] === "Other" && "bg-slate-100 border-slate-200"}
-                    `
-                }
+                    ${transaction.category === "Shopping" && "bg-emerald-50 border-emerald-200"}
+                    ${transaction.category === "Entertainment" && "bg-purple-100  border-purple-200"}
+                    ${transaction.category === "Medical" && "bg-red-50 border-red-200"}
+                    ${transaction.category === "Utilities" && "bg-emerald-50 border-emerald-200"}
+                    ${transaction.category === "Food" && "bg-[#FAD4C0]/40  border-[#FAD4C0]"}
+                    ${transaction.category === "Rent" && "bg-[#80A1C1]/20  border-[#80A1C1]/40"}
+                    ${transaction.category === "Education" && "bg-sky-50 border-sky-200"}
+                    ${transaction.category === "Other" && "bg-slate-100 border-slate-200"}
+                    `}
               >
-                {transaction.category.split(" ")[0]}
+                {transaction.category === "Shopping" && <span>🛍️</span>}
+                {transaction.category === "Entertainment" && <span>🎬</span>}
+                {transaction.category === "Medical" && <span>💊</span>}
+                {transaction.category === "Utilities" && <span>⚡</span>}
+                {transaction.category === "Food" && <span>🍱</span>}
+                {transaction.category === "Rent" && <span>🏠</span>}
+                {transaction.category === "Education" && <span>📚</span>}
+                {transaction.category === "Other" && <span>✨</span>}
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
                   <h4 className="text-sm sm:text-base font-bold text-[#111827] truncate">
                     {transaction.title}
                   </h4>
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold 
-                    ${transaction.category.split(" ")[1] === "Shopping" && "bg-emerald-50 text-[#16A34A] border border-emerald-200"}
-                    ${transaction.category.split(" ")[1] === "Entertainment" && "bg-purple-100 text-purple-900 border border-purple-200"}
-                    ${transaction.category.split(" ")[1] === "Medical" && "bg-red-50 text-[#DC2626] border border-red-200"}
-                    ${transaction.category.split(" ")[1] === "Utilities" && "bg-amber-50 text-[#D97706] border border-amber-200"}
-                    ${transaction.category.split(" ")[1] === "Food" && "bg-[#FAD4C0]/40 text-[#111827] border border-[#FAD4C0]"}
-                    ${transaction.category.split(" ")[1] === "Rent" && "bg-[#80A1C1]/20 text-[#111827] border border-[#80A1C1]/40"}
-                    ${transaction.category.split(" ")[1] === "Education" && "bg-sky-50 text-[#0284C7] border border-sky-200"}
-                    ${transaction.category.split(" ")[1] === "Other" && "bg-slate-100 text-[#475569] border border-slate-200"}
-                    `}>
-                    {transaction.category.split(" ")[1]}
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold 
+                    ${transaction.category === "Shopping" && "bg-emerald-50 text-[#16A34A] border border-emerald-200"}
+                    ${transaction.category === "Entertainment" && "bg-purple-100 text-purple-900 border border-purple-200"}
+                    ${transaction.category === "Medical" && "bg-red-50 text-[#DC2626] border border-red-200"}
+                    ${transaction.category === "Utilities" && "bg-amber-50 text-[#D97706] border border-amber-200"}
+                    ${transaction.category === "Food" && "bg-[#FAD4C0]/40 text-[#111827] border border-[#FAD4C0]"}
+                    ${transaction.category === "Rent" && "bg-[#80A1C1]/20 text-[#111827] border border-[#80A1C1]/40"}
+                    ${transaction.category === "Education" && "bg-sky-50 text-[#0284C7] border border-sky-200"}
+                    ${transaction.category === "Other" && "bg-slate-100 text-[#475569] border border-slate-200"}
+                    `}
+                  >
+                    {transaction.category}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-[#6B7280]">
@@ -80,7 +102,12 @@ const{transactions}=useContext(TransactionContext)
                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                       />
                     </svg>
-                    {transaction.date}
+                    {new Date(transaction.date).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      timeZone: "UTC",
+                    })}
                   </span>
                   <span className="hidden sm:inline-block truncate max-w-xs">
                     • {transaction.type}
@@ -98,8 +125,10 @@ const{transactions}=useContext(TransactionContext)
 
               <div className="flex items-center gap-1.5">
                 <button
+                  type="button"
                   title="Edit Expense"
                   className="p-2 rounded-xl bg-[#FFF5E6] hover:bg-[#FAD4C0] text-[#111827] border border-[#111827]/10 transition-colors cursor-pointer"
+                  onClick={() => handelEdit(transaction)}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +147,7 @@ const{transactions}=useContext(TransactionContext)
                 </button>
 
                 <button
-                  title="Delete Expense"
+                  onClick={() => handleDelete(transaction.id)}
                   className="p-2 rounded-xl bg-[#FFF5E6] hover:bg-[#DC2626]/15 hover:text-[#DC2626] text-[#111827] border border-[#111827]/10 transition-colors cursor-pointer"
                 >
                   <svg
@@ -140,8 +169,6 @@ const{transactions}=useContext(TransactionContext)
             </div>
           </div>
         ))}
-
-       
       </div>
 
       <div
