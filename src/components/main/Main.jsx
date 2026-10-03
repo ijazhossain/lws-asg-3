@@ -1,8 +1,6 @@
 import CategoryFilter from "./category/CategoryFilter";
 import CategorySpendingOverview from "./category/CategorySpendingOverview";
-import DeleteModal from "./DeleteModal";
 import Summary from "./summary/Summary";
-import ToastNotification from "./ToastNotification";
 import Transactions from "./transactions/Transactions";
 
 export default function Main() {
@@ -14,8 +12,7 @@ export default function Main() {
         <CategoryFilter />
         <Transactions />
       </main>
-      <DeleteModal />
-      <ToastNotification />
+      
     </>
   );
 }

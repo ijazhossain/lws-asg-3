@@ -34,6 +34,7 @@ export default function Modal() {
     }
 
     setNewTransaction(initialForm);
+    setModalOpen(false)
   };
   const handleClose = () => {
     setNewTransaction(initialForm);
@@ -253,6 +254,7 @@ export default function Modal() {
                 </span>
               </label>
               <textarea
+              name="note"
                 value={newTransaction?.note}
                 rows="2"
                 placeholder="Add brief details about this expense..."
