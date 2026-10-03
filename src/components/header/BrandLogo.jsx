@@ -1,9 +1,10 @@
+import Logo from "../../assets/logo.svg"
 export default function BrandLogo() {
   return (
     <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-2xl bg-[#111827] flex items-center justify-center shadow-sm p-1.5">
             <img
-              src="assets/logo.svg"
+              src={Logo}
               alt="BentoSpend Logo"
               className="w-full h-full object-contain"
             />

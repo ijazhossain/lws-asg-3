@@ -47,7 +47,7 @@ export const initialTransactions = [
     {
         id: crypto.randomUUID(),
         title: "Monthly House Rent",
-        amount: "1,200.00",
+        amount: "1200.00",
         category: "Rent",
         date: "2026-08-01",
         type: "Apartment monthly lease payment",
