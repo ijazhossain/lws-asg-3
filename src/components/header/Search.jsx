@@ -1,10 +1,17 @@
+import { useContext } from "react"
+import { FilterContext } from "../../context"
+
 export default function Search() {
+  const{filters,setFilters}=useContext(FilterContext)
   return (
    <div className="hidden md:flex items-center flex-1 max-w-md mx-6">
           <div className="relative w-full">
             <input
               type="text"
-              id="headerSearchInput"
+               value={filters.search}
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, search: e.target.value }))
+              }
               placeholder="Search expenses by title..."
               className="w-full pl-10 pr-10 py-2.5 bg-white border border-[#111827]/15 rounded-xl text-sm text-[#111827] placeholder:text-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#80A1C1] focus:border-transparent transition-all shadow-sm"
             />

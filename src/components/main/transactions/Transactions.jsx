@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import {
+  FilterContext,
   ModalToggleContext,
   NewTransactionContext,
   TransactionContext,
@@ -13,6 +14,8 @@ export default function Transactions() {
   const { transactions, setTransactions } = useContext(TransactionContext);
   const { setModalOpen } = useContext(ModalToggleContext);
   const { setNewTransaction } = useContext(NewTransactionContext);
+  const {filters} =useContext(FilterContext)
+  
   const handelEdit = (transaction) => {
     setModalOpen(true);
     setNewTransaction(transaction);
@@ -38,7 +41,29 @@ export default function Transactions() {
     });
     setItemToDeleted(null);
   };
-
+const filteredTransactions=transactions.filter((transaction)=>{
+  return filters.search.trim() === "" || transaction.title.trim().toLowerCase().includes(filters.search.toLowerCase())
+}).filter((transaction)=>{
+  if(filters.category === "All Categories"){
+    return true
+  }else{
+    return transaction.category === filters.category;
+  }
+}).sort((a,b)=>{
+  if(filters.sortBy === "date-desc"){
+    return new Date(b.date)- new Date(a.date)
+  }
+ if(filters.sortBy === "date-asc"){
+    return new Date(a.date)- new Date(b.date)
+  }
+ if(filters.sortBy === "amount-desc"){
+    return Number(b.amount)- Number(a.amount)
+  }
+ if(filters.sortBy === "amount-asc"){
+    return Number(a.amount)- Number(b.amount)
+  }
+  return 0;
+})
   return (
     <>
       {itemToDeleted && (
@@ -54,7 +79,7 @@ export default function Transactions() {
               Transactions & Records
             </h2>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#80A1C1]/20 text-[#111827]">
-              {transactions.length} Records
+              {filteredTransactions.length} Records
             </span>
           </div>
           <div className="text-xs text-[#6B7280]">
@@ -63,7 +88,7 @@ export default function Transactions() {
         </div>
 
         <div className="space-y-3">
-          {transactions.map((transaction) => (
+          {[...filteredTransactions].map((transaction) => (
             <div
               key={transaction.id}
               className="bg-white rounded-2xl p-4 sm:p-5 border border-[#111827]/10 shadow-xs hover:shadow-md hover:border-[#80A1C1]/50 transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
@@ -143,7 +168,11 @@ export default function Transactions() {
               <div className="flex items-center justify-between sm:justify-end gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#111827]/5">
                 <div className="text-left sm:text-right">
                   <span className="text-base sm:text-lg font-bold font-mono text-[#111827] tracking-tight">
-                    ${transaction.amount}
+                    $
+                    {Number(transaction.amount).toLocaleString("en-us", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </span>
                 </div>
 
@@ -195,7 +224,7 @@ export default function Transactions() {
           ))}
         </div>
 
-       {!transactions.length && <EmptyList/>}
+        {!transactions.length && <EmptyList />}
 
         <div
           id="notFoundState"
